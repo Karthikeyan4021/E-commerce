@@ -1,0 +1,79 @@
+// Frontend (HTML + JavaScript)
+const loginForm = document.querySelector('.login-form');
+const registerForm = document.querySelector('.register-form');
+const loginBtn = document.querySelector('#login-btn');
+const registerBtn = document.querySelector('#register-btn');
+
+// Show Register Form
+document.querySelector('#create-account').addEventListener('click', () => {
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'block';
+});
+
+// Show Login Form
+document.querySelector('#back-to-login').addEventListener('click', () => {
+    registerForm.style.display = 'none';
+    loginForm.style.display = 'block';
+});
+
+// Register User
+registerBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = document.querySelector('#register-email').value;
+    const password = document.querySelector('#register-password').value;
+    
+    const response = await fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    });
+    
+    const data = await response.json();
+    alert(data.message);
+});
+
+// Login User
+loginBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = document.querySelector('#login-email').value;
+    const password = document.querySelector('#login-password').value;
+    
+    const response = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    });
+    
+    const data = await response.json();
+    alert(data.message);
+});
+
+// Backend (Node.js + Express + File System)
+const express = require('express');
+const fs = require('fs');
+const app = express();
+app.use(express.json());
+
+// Register Endpoint
+app.post('/register', (req, res) => {
+    const { email, password } = req.body;
+    const user = `${email},${password}\n`;
+    fs.appendFileSync('users.txt', user);
+    res.json({ message: 'Registration successful!' });
+});
+
+// Login Endpoint
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+    const users = fs.readFileSync('users.txt', 'utf8').split('\n');
+    
+    for (const user of users) {
+        const [storedEmail, storedPassword] = user.split(',');
+        if (storedEmail === email && storedPassword === password) {
+            return res.json({ message: 'Login successful!' });
+        }
+    }
+    res.json({ message: 'Invalid credentials!' });
+});
+
+app.listen(3000, () => console.log('Server running on port 3000'));

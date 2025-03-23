@@ -1,0 +1,21 @@
+<script>
+document.getElementById("contactForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    let formData = new FormData(this);
+
+    fetch("http://localhost:8080/api/contact/send", {
+        method: "POST",
+        body: new URLSearchParams(formData)
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data === "Success") {
+            document.getElementById("successMessage").style.display = "block";
+        } else {
+            alert("Error sending message: " + data);
+        }
+    })
+    .catch(error => console.error("Error:", error));
+});
+</script>

@@ -1,4 +1,4 @@
-# E-commerce
-An e-commerce website is an online platform that allows businesses and individuals to buy and sell products
+# Construction Website Design
+### This design is inspired by the work of [Mr. Web Designer](https://www.youtube.com/@MrWebDesignerAnas). Click [here](https://youtu.be/Lh4ui-FBTzI) to watch the video.
 
-An index.html file is the default entry point of a website. 
+![preview img](/preview.png)

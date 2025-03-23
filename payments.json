@@ -1,0 +1,31 @@
+<?php
+$file = 'payments.json';
+
+// Get existing data
+$data = file_exists($file) ? json_decode(file_get_contents($file), true) : [];
+
+// Get form data
+$name = $_POST['name'];
+$email = $_POST['email'];
+$phone = $_POST['phone'];
+$address = $_POST['address'];
+
+// Create an array for the new entry
+$newEntry = [
+    "name" => $name,
+    "email" => $email,
+    "phone" => $phone,
+    "address" => $address,
+    "timestamp" => date("Y-m-d H:i:s")
+];
+
+// Append new entry to data
+$data[] = $newEntry;
+
+// Save data back to file
+if (file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT))) {
+    echo "success";  // Response for AJAX
+} else {
+    echo "error";
+}
+?>
